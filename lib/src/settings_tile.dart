@@ -131,9 +131,7 @@ class SettingsTile extends StatelessWidget {
           textDirection: TextDirection.ltr,
         );
         subtitleTp.layout(
-          maxWidth: size.maxWidth - 72.0 * (isSwitchTile
-              ? 2
-              : 1),
+          maxWidth: size.maxWidth - 88.0 - (isSwitchTile ? 72 : 0),
         );
         final subtitleIsThreeLine = subtitleTp.didExceedMaxLines ? true : false;
 
