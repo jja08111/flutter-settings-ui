@@ -46,7 +46,7 @@ class SettingsList extends StatelessWidget {
               current.showBottomDivider = false;
               return current;
             } else {
-              current.showBottomDivider = true;
+              current.showBottomDivider = false;
               return current;
             }
           },
