@@ -121,44 +121,64 @@ class SettingsTile extends StatelessWidget {
   }
 
   Widget androidTile(BuildContext context) {
-    if (_tileType == _SettingsTileType.switchTile) {
-      return SwitchListTile(
-        secondary: leading,
-        value: switchValue,
-        activeColor: switchActiveColor,
-        onChanged: enabled ? onToggle : null,
-        title: Text(
-          title,
-          style: titleTextStyle,
-          maxLines: titleMaxLines,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: subtitle != null
-            ? Text(
-                subtitle,
-                style: subtitleTextStyle,
-                maxLines: subtitleMaxLines,
-                overflow: TextOverflow.ellipsis,
-              )
-            : null,
-      );
-    } else {
-      return ListTile(
-        title: Text(title, style: titleTextStyle),
-        subtitle: subtitle != null
-            ? Text(
-                subtitle,
-                style: subtitleTextStyle,
-                maxLines: subtitleMaxLines,
-                overflow: TextOverflow.ellipsis,
-              )
-            : null,
-        leading: leading,
-        enabled: enabled,
-        trailing: trailing,
-        onTap: onTapFunction(context),
-      );
-    }
+    final isSwitchTile = _tileType == _SettingsTileType.switchTile;
+    return LayoutBuilder(
+      builder: (context, size) {
+        final subtitleSpan = TextSpan(text: subtitle, style: subtitleTextStyle);
+        final subtitleTp = TextPainter(
+          maxLines: 1,
+          text: subtitleSpan,
+          textDirection: TextDirection.ltr,
+        );
+        subtitleTp.layout(
+          maxWidth: size.maxWidth - 72.0 * (isSwitchTile
+              ? 2
+              : 1),
+        );
+        final subtitleIsThreeLine = subtitleTp.didExceedMaxLines ? true : false;
+
+        if (_tileType == _SettingsTileType.switchTile) {
+          return SwitchListTile(
+            secondary: leading,
+            value: switchValue,
+            activeColor: switchActiveColor,
+            onChanged: enabled ? onToggle : null,
+            title: Text(
+              title,
+              style: titleTextStyle,
+              maxLines: titleMaxLines,
+              overflow: TextOverflow.ellipsis,
+            ),
+            subtitle: subtitle != null
+                ? Text(
+              subtitle,
+              style: subtitleTextStyle,
+              maxLines: subtitleMaxLines,
+              overflow: TextOverflow.visible,
+            )
+                : null,
+            isThreeLine: subtitleIsThreeLine,
+          );
+        } else {
+          return ListTile(
+            title: Text(title, style: titleTextStyle),
+            subtitle: subtitle != null
+                ? Text(
+              subtitle,
+              style: subtitleTextStyle,
+              maxLines: subtitleMaxLines,
+              overflow: TextOverflow.visible,
+            )
+                : null,
+            isThreeLine: subtitleIsThreeLine,
+            leading: leading,
+            enabled: enabled,
+            trailing: trailing,
+            onTap: onTapFunction(context),
+          );
+        }
+      },
+    );
   }
 
   Function onTapFunction(BuildContext context) =>
